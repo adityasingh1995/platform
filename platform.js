@@ -259,7 +259,7 @@ function runAnimation(frameFunc) {
 var arrows = trackKeys(arrowCodes);
 function runLevel(level, Display, andThen) {
   var pause = false;
-  var display = new Display(document.body, level);
+  var display = new Display(document.getElementById("gamebox"), level);
   addEventListener("keydown", handler);
   function handler(event){
       if(event.keyCode === 27){
@@ -290,9 +290,12 @@ function runLevel(level, Display, andThen) {
   }
 }
   
+
+
 function runGame(plans, Display) {
   var lives = 3;
   function startLevel(n) {
+    updateScoreBoard(scoreBoard, n+1);
     runLevel(new Level(plans[n]), Display, function(status) {
       if (status == "lost"){
 	lives = lives - 1;
@@ -300,6 +303,7 @@ function runGame(plans, Display) {
 	  startLevel(n);
 	else{
 	  console.log("lost");
+	  lives = 3;
 	  startLevel(0);
 	}
       }
@@ -309,6 +313,15 @@ function runGame(plans, Display) {
         console.log("You win!");
     });
   }
+
+  function updateScoreBoard(boardElement, n) {
+    levelboard = boardElement.getElementsByClassName("levelboard")[0];
+    levelboard.innerHTML = n;
+    healthboard = boardElement.getElementsByClassName("healthboard")[0];
+    healthboard.innerHTML = lives;
+  }
+
+  scoreBoard = document.getElementById("scorebox");
   startLevel(0);
 }
 
